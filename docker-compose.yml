@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  web:
+    build:
+      context: ./web/
+    image: php-server:7.3.5-alpine
+    container_name: php-server
+    ports:
+      - "8080:80"
+
+  worker:
+    build:
+      context: ./worker/
+    image: php-worker:7.3.5-alpine
+    container_name: php-worker
