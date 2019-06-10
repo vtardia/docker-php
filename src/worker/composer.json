@@ -1,0 +1,15 @@
+{
+    "name": "vito/worker",
+    "description": "Dummy PHP background worker",
+    "type": "project",
+    "require": {
+        "monolog/monolog": "^1.24"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vito Tardia",
+            "email": "vito@tardia.me"
+        }
+    ]
+}

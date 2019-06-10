@@ -3,11 +3,7 @@ version: '3'
 services:
 
   web:
-    build:
-      context: ./src/
-      # must be relative to context directory
-      dockerfile: ../build/Dockerfile.web
-    image: app-web:1.0
+    image: "app-web:${WEB_VERSION:-1.0}"
     container_name: app-server
     depends_on:
       - mariadb
@@ -31,11 +27,7 @@ services:
       MONGODB_PASSWORD: password
 
   worker:
-    build:
-      context: ./src/
-      # must be relative to context directory
-      dockerfile: ../build/Dockerfile.worker
-    image: app-worker:1.0
+    image: "app-worker:${WORKER_VERSION:-1.0}"
     container_name: app-worker
     depends_on:
       - mariadb

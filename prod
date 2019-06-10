@@ -1,0 +1,24 @@
+#!/bin/bash
+
+path=$0
+if [[ -L $0 ]]; then
+    path=$(readlink $0)
+fi
+DIR="$(cd "$(dirname "$path")" && pwd)"
+
+if [ $# == 0 ]; then
+    echo "Usage: ./prod <start|stop>"
+    exit 1
+fi
+
+if [ $1 == "start" ]; then
+    echo "Starting..."
+    WEB_VERSION=$(cat $DIR/build/web.version) WORKER_VERSION=$(cat $DIR/build/worker.version) docker-compose -f $DIR/docker-compose.prod.yml up --force-recreate -d
+    exit $?
+fi
+
+if [ $1 == "stop" ]; then
+    echo "Stopping..."
+    docker-compose -f $DIR/docker-compose.prod.yml down
+    exit $?
+fi

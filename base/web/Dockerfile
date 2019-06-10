@@ -1,5 +1,7 @@
 FROM php:7.3.5-fpm-alpine3.9
 
+ENV NGINX_DOC_ROOT /var/www/app/public
+
 RUN apk update \
     && apk add --no-cache --virtual .mongodb-ext-build-deps autoconf \
     build-base openssl-dev pcre-dev \
@@ -11,7 +13,7 @@ RUN apk update \
     && apk del .mongodb-ext-build-deps autoconf build-base \
     && rm -rf /var/cache/apk/*
 
-RUN mkdir -p /run/nginx /var/www/html /var/log/supervisor
+RUN mkdir -p /run/nginx ${NGINX_DOC_ROOT} /var/log/supervisor
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
@@ -20,13 +22,20 @@ RUN curl -sS https://getcomposer.org/installer | php \
         && mv composer.phar /usr/local/bin/ \
         && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
+# Add unprivileged user
+RUN addgroup phpuser -g 1001
+RUN adduser -S -u 1001 -G phpuser -h /home/phpuser -s /bin/bash phpuser
+RUN mkdir -p /home/phpuser/.composer/cache /home/phpuser/.ssh
+RUN touch /home/phpuser/.ssh/known_hosts
+RUN chown -R phpuser:phpuser /home/phpuser
+
 COPY etc/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY etc/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY html/index.html /var/www/html/index.html
+COPY html/index.html ${NGINX_DOC_ROOT}/index.html
 
-COPY html/info.php /var/www/html/info.php
+COPY html/info.php ${NGINX_DOC_ROOT}/info.php
 
 EXPOSE 80 443
 ENTRYPOINT ["/usr/bin/supervisord"]

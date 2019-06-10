@@ -1,0 +1,13 @@
+#!/bin/bash
+
+path=$0
+if [[ -L $0 ]]; then
+    path=$(readlink $0)
+fi
+
+DIR="$(cd "$(dirname "$path")" && pwd)"
+
+IMAGE_NAME="app-worker"
+IMAGE_TAG=`date +%Y%m%d%H%M%S`
+
+docker build -f "$DIR/Dockerfile.worker" "$DIR/../src/" -t "${IMAGE_NAME}:${IMAGE_TAG}" && echo "${IMAGE_TAG}" > "$DIR/worker.version"

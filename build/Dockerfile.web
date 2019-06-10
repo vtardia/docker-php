@@ -1,0 +1,19 @@
+FROM php-server:7.3.5-alpine
+
+# Edit here to use a different location
+# ENV NGINX_DOC_ROOT /var/www/app/public
+
+COPY ./app ${NGINX_DOC_ROOT}/../../app
+
+# It seems that COPY keep files on destination if they are not on source
+RUN rm ${NGINX_DOC_ROOT}/index.html
+
+RUN chown -R www-data:www-data ${NGINX_DOC_ROOT}/../
+
+# Use unprivileged user to install dependencies
+WORKDIR ${NGINX_DOC_ROOT}/../
+USER www-data
+RUN composer install --no-interaction
+
+# Back to root user for starting daemons
+USER root

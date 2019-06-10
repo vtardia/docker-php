@@ -1,0 +1,16 @@
+{
+    "name": "vito/app",
+    "description": "Dummy PHP web application",
+    "type": "project",
+    "require": {
+        "slim/slim": "^3",
+        "mongodb/mongodb": "^1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vito Tardia",
+            "email": "vito@tardia.me"
+        }
+    ]
+}

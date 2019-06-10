@@ -16,18 +16,24 @@ RUN curl -sS https://getcomposer.org/installer | php \
         && mv composer.phar /usr/local/bin/ \
         && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
+# Add unprivileged user
+RUN addgroup phpuser -g 1001
+RUN adduser -S -u 1001 -G phpuser -h /home/phpuser -s /bin/bash phpuser
+RUN mkdir -p /home/phpuser/.composer/cache /home/phpuser/.ssh
+RUN touch /home/phpuser/.ssh/known_hosts
+RUN chown -R phpuser:phpuser /home/phpuser
+
 RUN mkdir -p /usr/local/worker /var/log/worker
+RUN chown -R phpuser:phpuser /usr/local/worker /var/log/worker
+
+# Use unprivileged user from now on
+USER phpuser
+ENV HOME /home/phpuser
 
 # Redirect log file to stdout
 RUN ln -sf /dev/stdout /var/log/worker/activity.log
 
 COPY ./bin /usr/local/worker/bin
-# COPY ./composer.json /usr/local/worker/composer.json
-WORKDIR /usr/local/worker
-
-# RUN composer install --no-interaction
-
-# ENV PATH="~/.composer/vendor/bin:./vendor/bin:${PATH}"
 
 WORKDIR /usr/local/worker
 

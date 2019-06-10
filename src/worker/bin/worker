@@ -1,0 +1,54 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+declare(ticks = 1);
+
+$terminate = false;
+$logFile = 'php://stdout';
+/* $logFile = '/var/log/worker/activity.log'; */
+
+$processUser = posix_getpwuid(posix_geteuid());
+
+$log = new Logger('activity');
+$log->pushHandler(new StreamHandler($logFile, Logger::INFO));
+
+if (function_exists('pcntl_signal')) {
+    pcntl_signal(SIGTERM, 'onSignal');
+    pcntl_signal(SIGINT, 'onSignal');
+    pcntl_signal(SIGQUIT, 'onSignal');
+}
+
+/**
+ * Manage process signals
+ *
+ * @param  int $signal System signal
+ * @return void
+ */
+function onSignal($signal)
+{
+    global $terminate, $log;
+    $signals = [SIGTERM => 'SIGTERM', SIGINT => 'SIGINT', SIGQUIT => 'SIGQUIT'];
+    switch ($signal) {
+        case SIGTERM:
+            // shutdown taks, or 'kill <pid>'
+        case SIGINT:
+            // ctrl+c pressed
+        case SIGQUIT:
+            $message = sprintf('Received %s signal, will exit after current job finishes', $signals[$signal]);
+            $log->notice($message);
+            $terminate = true;
+            return;
+    }
+}
+
+$log->notice("Starting...", ['user' => $processUser]);
+while (!$terminate) {
+    $log->info("Working harder...");
+    sleep(5);
+}
+$log->notice("Terminating...");
+exit(0);

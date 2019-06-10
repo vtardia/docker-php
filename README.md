@@ -13,12 +13,13 @@ All PHP images have MySQL and MongoDB extensions enabled.
 
 ## TODO
 
- - [ ] Move Nginx host and port settings within ENV vars
- - [ ] Use web and worker as base images and build separate web app and worker
- - [ ] Use Monolog with worker and send to stdout/err
- - [ ] Use non-root user for worker
- - [ ] Build basic Slim app
- - [ ] Attach MySQL and MongoDB servers
+ - [-] Move Nginx host and port settings within ENV vars
+       Nginx conf does not support env vars, needs to customize single vhost file or use substitution scripts
+ - [x] Use web and worker as base images and build separate web app and worker
+ - [x] Use Monolog with worker and send to stdout/err
+ - [x] Use non-root user for worker
+ - [x] Build basic Slim app
+ - [x] Attach MySQL and MongoDB servers
  - [ ] Improve Nginx and PHP config
 
 
