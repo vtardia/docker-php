@@ -1,5 +1,6 @@
 FROM php:7.3.5-cli-alpine3.9
 
+# Install (and cleanup) basic packages
 RUN apk update \
     && apk add --no-cache --virtual .mongodb-ext-build-deps autoconf \
     build-base openssl-dev pcre-dev bash \
@@ -12,6 +13,7 @@ RUN apk update \
     && apk del .mongodb-ext-build-deps autoconf build-base \
     && rm -rf /var/cache/apk/*
 
+# Install Composer to shared location
 RUN curl -sS https://getcomposer.org/installer | php \
         && mv composer.phar /usr/local/bin/ \
         && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
@@ -23,18 +25,10 @@ RUN mkdir -p /home/phpuser/.composer/cache /home/phpuser/.ssh
 RUN touch /home/phpuser/.ssh/known_hosts
 RUN chown -R phpuser:phpuser /home/phpuser
 
-RUN mkdir -p /usr/local/worker /var/log/worker
-RUN chown -R phpuser:phpuser /usr/local/worker /var/log/worker
-
 # Use unprivileged user from now on
 USER phpuser
 ENV HOME /home/phpuser
 
-# Redirect log file to stdout
-RUN ln -sf /dev/stdout /var/log/worker/activity.log
+WORKDIR $HOME
 
-COPY ./bin /usr/local/worker/bin
-
-WORKDIR /usr/local/worker
-
-CMD ["bin/worker"]
+CMD ["php", "-v"]

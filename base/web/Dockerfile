@@ -2,6 +2,7 @@ FROM php:7.3.5-fpm-alpine3.9
 
 ENV NGINX_DOC_ROOT /var/www/app/public
 
+# Install (and cleanup) basic packages
 RUN apk update \
     && apk add --no-cache --virtual .mongodb-ext-build-deps autoconf \
     build-base openssl-dev pcre-dev \
@@ -20,6 +21,7 @@ RUN mkdir -p /run/nginx ${NGINX_DOC_ROOT} /var/log/supervisor
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+# Install Composer to shared location
 RUN curl -sS https://getcomposer.org/installer | php \
         && mv composer.phar /usr/local/bin/ \
         && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
