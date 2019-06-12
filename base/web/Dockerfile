@@ -13,8 +13,10 @@ RUN apk update \
     && apk del .mongodb-ext-build-deps autoconf build-base \
     && rm -rf /var/cache/apk/*
 
+# Create required directories for Nginx and Supervisor
 RUN mkdir -p /run/nginx ${NGINX_DOC_ROOT} /var/log/supervisor
 
+# Redirect Nginx logs to stdout/stderr
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
@@ -29,13 +31,12 @@ RUN mkdir -p /home/phpuser/.composer/cache /home/phpuser/.ssh
 RUN touch /home/phpuser/.ssh/known_hosts
 RUN chown -R phpuser:phpuser /home/phpuser
 
+# Copy configuration for Supervisor and Nginx
 COPY etc/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
 COPY etc/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY html/index.html ${NGINX_DOC_ROOT}/index.html
-
-COPY html/info.php ${NGINX_DOC_ROOT}/info.php
+# Copy dummy index PHP file
+COPY html/index.php ${NGINX_DOC_ROOT}/index.php
 
 EXPOSE 80 443
 ENTRYPOINT ["/usr/bin/supervisord"]
