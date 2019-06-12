@@ -3,7 +3,8 @@ FROM php-worker:7.3.5-alpine
 # Edit here to use a different location
 # and remember to chown/chmod to phpuser
 # and use USER root if you need to work on system stuff
-ENV WORKER_HOME /usr/local/worker
+ENV WORKER_HOME ${HOME}/worker
+RUN mkdir -p ${WORKER_HOME}
 
 COPY ./worker/bin ${WORKER_HOME}/bin
 
@@ -15,5 +16,5 @@ RUN composer install --no-interaction
 
 ENV PATH="~/.composer/vendor/bin:./vendor/bin:${PATH}"
 
-# Uncomment and edit to use a different command
-# CMD ["bin/worker"]
+# Edit below to use a different command
+CMD ["bin/worker"]

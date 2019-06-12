@@ -11,6 +11,10 @@ All PHP images have MySQL and MongoDB extensions enabled.
 
 **Please note**: this is a proof of concept, not production-ready stuff!
 
+## SSL
+
+Although it may be tempting to embed SSL configuration and certs within web images, it does make more sense to let them serve HTTP and have a frontend proxy as SSL endpoint on the deployment server.
+
 ## TODO
 
  - [-] Move Nginx host and port settings within ENV vars
@@ -21,6 +25,7 @@ All PHP images have MySQL and MongoDB extensions enabled.
  - [x] Build basic Slim app
  - [x] Attach MySQL and MongoDB servers
  - [ ] Improve Nginx and PHP config
-
+ - [ ] Use wait code for mysql/mongo to start
+ - [ ] Test SSL with proxy
 
 [slides]: https://joind.in/event/php-uk-conference-2019/massively-scaled-high-performance-web-services-with-php

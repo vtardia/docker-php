@@ -1,4 +1,4 @@
-let error = true
+let error = false
 
 let res = [
   db.dummies.drop(),

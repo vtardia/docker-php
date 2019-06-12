@@ -7,7 +7,7 @@ fi
 DIR="$(cd "$(dirname "$path")" && pwd)"
 
 if [ $# == 0 ]; then
-    echo "Usage: ./prod <start|stop>"
+    echo "Usage: ./prod <start|stop|logs>"
     exit 1
 fi
 
@@ -21,4 +21,9 @@ if [ $1 == "stop" ]; then
     echo "Stopping..."
     docker-compose -f $DIR/docker-compose.prod.yml down
     exit $?
+fi
+
+if [ $1 == "logs" ]; then
+    echo "Reading logs..."
+    docker-compose logs -f $2
 fi
