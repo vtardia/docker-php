@@ -13,6 +13,10 @@ RUN apk update \
     && apk del .mongodb-ext-build-deps autoconf build-base \
     && rm -rf /var/cache/apk/*
 
+# Use PHP INI production file by default
+# You can use a dev or custom version on child images
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+
 # Install Composer to shared location
 RUN curl -sS https://getcomposer.org/installer | php \
         && mv composer.phar /usr/local/bin/ \

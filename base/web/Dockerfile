@@ -21,6 +21,10 @@ RUN mkdir -p /run/nginx ${NGINX_DOC_ROOT} /var/log/supervisor
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+# Use PHP INI production file by default
+# You can use a dev or custom version on child images
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+
 # Install Composer to shared location
 RUN curl -sS https://getcomposer.org/installer | php \
         && mv composer.phar /usr/local/bin/ \
