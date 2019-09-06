@@ -24,7 +24,7 @@ Although it may be tempting to embed SSL configuration and certs within web imag
  - [x] Use non-root user for worker
  - [x] Build basic Slim app
  - [x] Attach MySQL and MongoDB servers
- - [-] Improve Nginx and PHP config
+ - [x] Improve Nginx and PHP config
  - [ ] Use wait code for mysql/mongo to start
  - [ ] Test SSL with proxy
 

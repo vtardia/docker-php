@@ -5,7 +5,7 @@ Self-contained PHP/CLI image
 ## Build
 
 ```console
-$ cd worker && docker build . -t [docker-username/]php-worker:7.3.5-alpine
+$ cd base/worker && docker build . -t [docker-username/]php-worker:7.3.5-alpine
 ```
 
 ```console

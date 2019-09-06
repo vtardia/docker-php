@@ -5,7 +5,7 @@ Self-contained PHP/Nginx image with Supervisor
 ## Build
 
 ```console
-$ cd web && docker build . -t [docker-username/]php-server:7.3.5-alpine
+$ cd base/web && docker build . -t [docker-username/]php-server:7.3.5-alpine
 ```
 
 ```console

@@ -39,10 +39,13 @@ RUN chown -R phpuser:phpuser /home/phpuser
 
 # Copy configuration for Supervisor and Nginx
 COPY etc/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY etc/nginx.conf /etc/nginx/conf.d/default.conf
+COPY etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY etc/nginx/server.conf /etc/nginx/conf.d/default.conf
 
 # Copy dummy index PHP file
 COPY html/index.php ${NGINX_DOC_ROOT}/index.php
+
+WORKDIR /root
 
 EXPOSE 80 443
 ENTRYPOINT ["/usr/bin/supervisord"]
