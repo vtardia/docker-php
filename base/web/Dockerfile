@@ -1,4 +1,4 @@
-FROM php:7.3.5-fpm-alpine3.9
+FROM php:7.3.9-fpm-alpine3.10
 
 ENV NGINX_DOC_ROOT /var/www/app/public
 

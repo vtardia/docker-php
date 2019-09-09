@@ -1,4 +1,4 @@
-FROM php-worker:7.3.5-alpine
+FROM php-worker:7.3.9-alpine
 
 # Edit here to use a different location
 # and remember to chown/chmod to phpuser

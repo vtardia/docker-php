@@ -1,4 +1,4 @@
-FROM php:7.3.5-cli-alpine3.9
+FROM php:7.3.9-cli-alpine3.10
 
 # Install (and cleanup) basic packages
 RUN apk update \
