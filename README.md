@@ -25,7 +25,7 @@ Although it may be tempting to embed SSL configuration and certs within web imag
  - [x] Build basic Slim app
  - [x] Attach MySQL and MongoDB servers
  - [x] Improve Nginx and PHP config
- - [ ] Use wait code for mysql/mongo to start
+ - [x] Use wait code for mysql/mongo to start
  - [ ] Test SSL with proxy
 
 [slides]: https://joind.in/event/php-uk-conference-2019/massively-scaled-high-performance-web-services-with-php

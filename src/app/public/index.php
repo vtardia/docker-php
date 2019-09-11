@@ -2,9 +2,7 @@
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-require __DIR__ . '/../vendor/autoload.php';
-
-$app = new \Slim\App;
+require __DIR__ . '/../bootstrap.php';
 
 $app->get('/', function (Request $request, Response $response, array $args) {
     $response->getBody()->write('Hello, World!');
@@ -12,12 +10,9 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 });
 
 $app->get('/mysql', function (Request $request, Response $response, array $args) {
-    $dsn = sprintf('mysql:dbname=%s;host=%s', getenv('MYSQL_DATABASE'), getenv('MYSQL_HOST'));
-    $user = getenv('MYSQL_USER');
-    $password = getenv('MYSQL_PASSWORD');
     try {
-        $dbh = new PDO($dsn, $user, $password);
-        $sth = $dbh->prepare('SELECT * FROM `users`;');
+        $db = $this->get('mysql');
+        $sth = $db->prepare('SELECT * FROM `users`;');
         $sth->execute();
         $data = $sth->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -29,16 +24,8 @@ $app->get('/mysql', function (Request $request, Response $response, array $args)
 });
 
 $app->get('/mongodb', function (Request $request, Response $response, array $args) {
-    $dsn = sprintf(
-        'mongodb://%s:%s@%s:%s/admin',
-        getenv('MONGODB_USER'),
-        getenv('MONGODB_PASSWORD'),
-        getenv('MONGODB_HOST'),
-        (getenv('MONGODB_PORT') ?? 27017)
-    );
     try {
-        $client = new MongoDB\Client($dsn);
-        $db = $client->selectDatabase(getenv('MONGODB_DATABASE'));
+        $db = $this->get('mongodb');
         $collection = $db->selectCollection('dummies');
         $result = $collection->find();
         $data = [];
