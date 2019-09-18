@@ -13,7 +13,9 @@ fi
 
 if [ $1 == "start" ]; then
     echo "Starting..."
-    WEB_VERSION=$(cat $DIR/build/web.version) WORKER_VERSION=$(cat $DIR/build/worker.version) docker-compose -f $DIR/docker-compose.prod.yml up --force-recreate -d $2
+    WEB_VERSION=$(if [ -f web.version ]; then cat $DIR/build/web.version; fi) \
+        WORKER_VERSION=$(if [ -f worker.version ]; then cat $DIR/build/worker.version; fi) \
+        docker-compose -f $DIR/docker-compose.prod.yml up --force-recreate -d $2
     exit $?
 fi
 
