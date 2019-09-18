@@ -13,17 +13,25 @@ fi
 
 if [ $1 == "start" ]; then
     echo "Starting..."
-    WEB_VERSION=$(cat $DIR/build/web.version) WORKER_VERSION=$(cat $DIR/build/worker.version) docker-compose -f $DIR/docker-compose.prod.yml up --force-recreate -d
+    WEB_VERSION=$(cat $DIR/build/web.version) WORKER_VERSION=$(cat $DIR/build/worker.version) docker-compose -f $DIR/docker-compose.prod.yml up --force-recreate -d $2
     exit $?
 fi
 
 if [ $1 == "stop" ]; then
     echo "Stopping..."
-    docker-compose -f $DIR/docker-compose.prod.yml down
+    if [ $2 ]; then
+        docker-compose -f $DIR/docker-compose.prod.yml stop $2
+    else
+        docker-compose -f $DIR/docker-compose.prod.yml down
+    fi
     exit $?
 fi
 
 if [ $1 == "logs" ]; then
     echo "Reading logs..."
     docker-compose logs -f $2
+fi
+
+if [ $1 == "ps" ]; then
+    docker-compose -f $DIR/docker-compose.prod.yml ps
 fi
