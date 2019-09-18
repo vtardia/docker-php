@@ -2,3 +2,5 @@
 /data/mariadb/db/*
 /data/mongodb/db/*
 /build/*.version
+# app-specific deploy files
+/deploy/*
