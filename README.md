@@ -64,7 +64,7 @@ $ scp build/app-web-20190911104105.tar.gz you@yourserver:/some/path/app-web-2019
 On your production server you can then `load` the new image into Docker:
 
 ```console
-$ ssh you@yourserver 'docker load /some/path/app-web-20190911104105.tar.gz'
+$ ssh you@yourserver 'docker load -i /some/path/app-web-20190911104105.tar.gz'
 $ scp build/web.version you@yourserver:/some/path/web.version
 ```
 
