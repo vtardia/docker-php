@@ -15,16 +15,16 @@ if [ $1 == "start" ]; then
     echo "Starting..."
     WEB_VERSION=$(if [ -f web.version ]; then cat $DIR/build/web.version; fi) \
         WORKER_VERSION=$(if [ -f worker.version ]; then cat $DIR/build/worker.version; fi) \
-        docker-compose -f $DIR/docker-compose.prod.yml up --force-recreate -d $2
+        docker-compose -f $DIR/docker-compose.prod.yml -f $DIR/docker-compose.override.yml up $3 -d $2
     exit $?
 fi
 
 if [ $1 == "stop" ]; then
     echo "Stopping..."
     if [ $2 ]; then
-        docker-compose -f $DIR/docker-compose.prod.yml stop $2
+        docker-compose -f $DIR/docker-compose.prod.yml -f $DIR/docker-compose.override.yml stop $2
     else
-        docker-compose -f $DIR/docker-compose.prod.yml down
+        docker-compose -f $DIR/docker-compose.prod.yml -f $DIR/docker-compose.override.yml down
     fi
     exit $?
 fi
@@ -35,5 +35,5 @@ if [ $1 == "logs" ]; then
 fi
 
 if [ $1 == "ps" ]; then
-    docker-compose -f $DIR/docker-compose.prod.yml ps
+    docker-compose -f $DIR/docker-compose.prod.yml -f $DIR/docker-compose.override.yml ps
 fi

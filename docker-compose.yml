@@ -9,6 +9,8 @@ services:
       dockerfile: ../build/Dockerfile.web
     image: app-web:1.0
     container_name: app-server
+    networks:
+      - backend
     depends_on:
       - mariadb
       - mongodb
@@ -37,6 +39,8 @@ services:
       dockerfile: ../build/Dockerfile.worker
     image: app-worker:1.0
     container_name: app-worker
+    networks:
+      - backend
     depends_on:
       - mariadb
       - mongodb
@@ -44,37 +48,6 @@ services:
       - mariadb:mariadb
       - mongodb:mongodb
 
-  mariadb:
-    image: mariadb:10.4
-    container_name: app-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mysite
-      MYSQL_USER: mysite
-      MYSQL_PASSWORD: mysite
-    volumes:
-      - ./data/mariadb/db:/var/lib/mysql
-      # Place init .sql file(s) at path below
-      - ./data/mariadb/init:/docker-entrypoint-initdb.d
-      - /tmp:/tmp
-    expose:
-      - "3306"
-    ports:
-      - "3306:3306"
-
-  mongodb:
-    image: mongo:4-xenial
-    container_name: app-mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: mysite
-    volumes:
-      - ./data/mongodb/db:/data/db
-      # Place init .js file(s) at path below
-      - ./data/mongodb/init:/docker-entrypoint-initdb.d
-      - /tmp:/tmp
-    expose:
-      - "27017"
-    ports:
-      - "27017:27017"
+networks:
+  backend:
+    driver: bridge
