@@ -18,11 +18,11 @@ All images are based on Alpine GNU/Linux in order to be as small as possible, an
 ### 1. Build the base images without username
 
 ```console
-$ cd base/web && docker build . -t php-server:7.3.9-alpine; cd ../..
+$ cd base/web && docker build . -t php-server:7.4-alpine; cd ../..
 ```
 
 ```console
-$ cd base/worker && docker build . -t php-worker:7.3.9-alpine; cd ../..
+$ cd base/worker && docker build . -t php-worker:7.4-alpine; cd ../..
 ```
 
 ### 2. Start the stack
