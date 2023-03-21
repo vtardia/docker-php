@@ -1,17 +1,16 @@
-FROM php:7.4-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 ENV NGINX_DOC_ROOT /var/www/app/public
 
 # Install (and cleanup) basic packages
 RUN apk update \
-    && apk add --no-cache --virtual .mongodb-ext-build-deps autoconf \
+    && apk add --no-cache linux-headers libzip-dev $PHPIZE_DEPS autoconf \
     build-base openssl-dev pcre-dev \
     && docker-php-ext-install pdo_mysql mysqli sockets \
     && docker-php-ext-install bcmath \
-    && pecl install mongodb && docker-php-ext-enable mongodb \
     && docker-php-source delete \
     && apk add --no-cache curl supervisor nginx \
-    && apk del .mongodb-ext-build-deps autoconf build-base \
+    && apk del linux-headers $PHPIZE_DEPS autoconf build-base \
     && rm -rf /var/cache/apk/*
 
 # Create required directories for Nginx and Supervisor
@@ -23,19 +22,20 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 
 # Use PHP INI production file by default
 # You can use a dev or custom version on child images
-RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
+    && echo 'expose_php = off' >> /usr/local/etc/php/conf.d/docker-fpm.ini
 
 # Install Composer to shared location
 RUN curl -sS https://getcomposer.org/installer | php \
-        && mv composer.phar /usr/local/bin/ \
-        && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
+    && mv composer.phar /usr/local/bin/ \
+    && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
 # Add unprivileged user
-RUN addgroup phpuser -g 1001
-RUN adduser -S -u 1001 -G phpuser -h /home/phpuser -s /bin/bash phpuser
-RUN mkdir -p /home/phpuser/.composer/cache /home/phpuser/.ssh
-RUN touch /home/phpuser/.ssh/known_hosts
-RUN chown -R phpuser:phpuser /home/phpuser
+RUN addgroup phpuser -g 1001 \
+    && adduser -S -u 1001 -G phpuser -h /home/phpuser -s /bin/bash phpuser \
+    && mkdir -p /home/phpuser/.composer/cache /home/phpuser/.ssh \
+    && touch /home/phpuser/.ssh/known_hosts \
+    && chown -R phpuser:phpuser /home/phpuser
 
 # Copy configuration for Supervisor and Nginx
 COPY etc/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
