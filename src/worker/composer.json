@@ -3,7 +3,11 @@
     "description": "Dummy PHP background worker",
     "type": "project",
     "require": {
-        "monolog/monolog": "^1.24"
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-pcntl": "*",
+        "monolog/monolog": "^3"
     },
     "license": "MIT",
     "authors": [

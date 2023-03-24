@@ -3,8 +3,14 @@
     "description": "Dummy PHP web application",
     "type": "project",
     "require": {
-        "slim/slim": "^3",
-        "monolog/monolog": "^2"
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*",
+        "php-di/php-di": "^6.4",
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4",
+        "monolog/monolog": "^3"
     },
     "license": "MIT",
     "authors": [
