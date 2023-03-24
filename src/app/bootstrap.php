@@ -37,27 +37,3 @@ $container['mysql'] = function ($c) {
     }
     throw new Exception(sprintf('Unable to connect to MySQL after %d attempts', $i));
 };
-
-// MongoDB database
-$container['mongodb'] = function ($c) {
-    $logger = $c->get('logger');
-    $dsn = sprintf(
-        'mongodb://%s:%s@%s:%s/admin',
-        getenv('MONGODB_USER'),
-        getenv('MONGODB_PASSWORD'),
-        getenv('MONGODB_HOST'),
-        (getenv('MONGODB_PORT') ?? 27017)
-    );
-    for ($i = 1; $i <= 5; $i++) {
-        try {
-            $client = new MongoDB\Client($dsn);
-            $db = $client->selectDatabase(getenv('MONGODB_DATABASE'));
-            $logger->info('Connected to MongoDB');
-            return $db;
-        } catch (PDOException $e) {
-            $logger->error('Unable to connect to MongoDB', ['error' => $e->getMessage()]);
-            sleep(5);
-        }
-    }
-    throw new Exception(sprintf('Unable to connect to MongoDB after %d attempts', $i));
-};
