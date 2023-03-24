@@ -13,10 +13,8 @@ services:
       - backend
     depends_on:
       - mariadb
-      - mongodb
     links:
       - mariadb:mariadb
-      - mongodb:mongodb
     ports:
       - "${WEB_PORT:-8000}:80"
     # In production use .env files or ${ENV_VAR} syntax
@@ -26,11 +24,6 @@ services:
       MYSQL_DATABASE: mysite
       MYSQL_USER: mysite
       MYSQL_PASSWORD: mysite
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
-      MONGODB_DATABASE: mysite
-      MONGODB_USER: root
-      MONGODB_PASSWORD: password
 
   worker:
     build:
@@ -43,10 +36,8 @@ services:
       - backend
     depends_on:
       - mariadb
-      - mongodb
     links:
       - mariadb:mariadb
-      - mongodb:mongodb
 
 networks:
   backend:

@@ -23,24 +23,4 @@ $app->get('/mysql', function (Request $request, Response $response, array $args)
     return $response;
 });
 
-$app->get('/mongodb', function (Request $request, Response $response, array $args) {
-    try {
-        $db = $this->get('mongodb');
-        $collection = $db->selectCollection('dummies');
-        $result = $collection->find();
-        $data = [];
-        foreach ($result as $document) {
-            $doc = $document->getArrayCopy();
-            $doc['_id'] = (string) $doc['_id'];
-            $data[] = $doc;
-        }
-    } catch (Exception $e) {
-        $response->getBody()->write('Error: ' . $e->getMessage());
-        return $response;
-    }
-
-    $response->getBody()->write('<pre>' . print_r($data, true) . '</pre>');
-    return $response;
-});
-
 $app->run();

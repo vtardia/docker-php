@@ -18,17 +18,17 @@ All images are based on Alpine GNU/Linux in order to be as small as possible, an
 ### 1. Build the base images without username
 
 ```console
-$ cd base/web && docker build . -t php-server:7.4-alpine; cd ../..
+$ cd base/web && docker build . -t php-server:8.2-alpine; cd ../..
 ```
 
 ```console
-$ cd base/worker && docker build . -t php-worker:7.4-alpine; cd ../..
+$ cd base/worker && docker build . -t php-worker:8.2-alpine; cd ../..
 ```
 
 ### 2. Start the stack
 
 ```console
-$ docker-compose up --build [-d]
+$ docker compose up --build [-d]
 ```
 
 ### 3. Check that all is working properly
@@ -40,7 +40,6 @@ The web app listen by default on `http://localhost:8000`, it exposes this endpoi
  - `/`: simple hello world
  - `/info.php`: shows PHP configuration
  - `/mysql`: connects to MySQL and fetches some sample data
- - `/mongodb`: connects to MongoDB and fetches some sample data
 
 ## Simple and naive production scenario
 

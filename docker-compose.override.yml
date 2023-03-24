@@ -22,25 +22,6 @@ services:
     networks:
       - backend
 
-  mongodb:
-    image: mongo:4-xenial
-    container_name: app-mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: mysite
-    volumes:
-      - ./data/mongodb/db:/data/db
-      # Place init .js file(s) at path below
-      - ./data/mongodb/init:/docker-entrypoint-initdb.d
-      - /tmp:/tmp
-    expose:
-      - "27017"
-    ports:
-      - "27017:27017"
-    networks:
-      - backend
-
 networks:
   backend:
     driver: bridge

@@ -4,7 +4,6 @@
     "type": "project",
     "require": {
         "slim/slim": "^3",
-        "mongodb/mongodb": "^1",
         "monolog/monolog": "^2"
     },
     "license": "MIT",

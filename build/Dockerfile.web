@@ -1,4 +1,4 @@
-FROM php-server:7.4-alpine
+FROM php-server:8.2-alpine
 
 # Edit here to use a different location
 ENV WWW_ROOT /var/www
