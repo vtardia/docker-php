@@ -3,11 +3,10 @@ FROM php:8.2-cli-alpine
 # Install (and cleanup) basic packages
 RUN apk update \
     && apk add --no-cache linux-headers libzip-dev $PHPIZE_DEPS autoconf \
-    build-base openssl-dev pcre-dev bash \
-    && docker-php-ext-install pdo_mysql mysqli sockets \
+    build-base openssl-dev pcre-dev libpq-dev bash \
+    && docker-php-ext-install pdo_pgsql pdo_mysql mysqli sockets \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install pcntl && docker-php-ext-enable pcntl \
-    && docker-php-ext-enable pcntl \
     && docker-php-source delete \
     && apk del linux-headers libzip-dev $PHPIZE_DEPS autoconf build-base \
     && rm -rf /var/cache/apk/*

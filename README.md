@@ -40,6 +40,7 @@ The web app listen by default on `http://localhost:8000`, it exposes this endpoi
  - `/`: simple hello world
  - `/info.php`: shows PHP configuration
  - `/mysql`: connects to MySQL and fetches some sample data
+ - `/postgres`: connects to Postgres and fetches some sample data
 
 ## Simple and naive production scenario
 

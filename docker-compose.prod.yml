@@ -9,8 +9,10 @@ services:
       - backend
     depends_on:
       - mariadb
+      - postgres
     links:
       - mariadb:mariadb
+      - postgres:postgres
     ports:
       - "${WEB_PORT:-8000}:80"
     # In production use .env files or ${ENV_VAR} syntax
@@ -20,6 +22,10 @@ services:
       MYSQL_DATABASE: mysite
       MYSQL_USER: mysite
       MYSQL_PASSWORD: mysite
+      POSTGRES_HOST: postgres
+      POSTGRES_DATABASE: mysite
+      POSTGRES_USER: mysite
+      POSTGRES_PASSWORD: mysite
 
   worker:
     image: "app-worker:${WORKER_VERSION:-1.0}"
@@ -28,8 +34,10 @@ services:
       - backend
     depends_on:
       - mariadb
+      - postgres
     links:
       - mariadb:mariadb
+      - postgres:postgres
 
 networks:
   backend:

@@ -5,8 +5,8 @@ ENV NGINX_DOC_ROOT /var/www/app/public
 # Install (and cleanup) basic packages
 RUN apk update \
     && apk add --no-cache linux-headers libzip-dev $PHPIZE_DEPS autoconf \
-    build-base openssl-dev pcre-dev \
-    && docker-php-ext-install pdo_mysql mysqli sockets \
+    build-base openssl-dev pcre-dev libpq-dev \
+    && docker-php-ext-install pdo_pgsql pdo_mysql mysqli sockets \
     && docker-php-ext-install bcmath \
     && docker-php-source delete \
     && apk add --no-cache curl supervisor nginx \
