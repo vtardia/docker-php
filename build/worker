@@ -8,8 +8,11 @@ fi
 DIR="$(cd "$(dirname "$path")" && pwd)"
 
 IMAGE_NAME="app-worker"
-IMAGE_TAG=`date +%Y%m%d%H%M%S`
+IMAGE_TAG=`git rev-parse --verify --short HEAD`
 
 echo "Building image '${IMAGE_NAME}:${IMAGE_TAG}'..."
 
-docker build -f "$DIR/Dockerfile.worker" "$DIR/../src/" -t "${IMAGE_NAME}:${IMAGE_TAG}" && echo "${IMAGE_TAG}" > "$DIR/worker.version"
+docker build -f "$DIR/Dockerfile.worker" "$DIR/../src/" \
+    -t "${IMAGE_NAME}:${IMAGE_TAG}" \
+    -t "${IMAGE_NAME}:latest" \
+    && echo "${IMAGE_TAG}" > "$DIR/worker.version"

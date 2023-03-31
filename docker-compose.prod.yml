@@ -3,7 +3,7 @@ version: '3'
 services:
 
   web:
-    image: "app-web:${WEB_VERSION:-1.0}"
+    image: "app-web:${WEB_VERSION:-dev}"
     container_name: app-server
     networks:
       - backend
@@ -28,7 +28,7 @@ services:
       POSTGRES_PASSWORD: mysite
 
   worker:
-    image: "app-worker:${WORKER_VERSION:-1.0}"
+    image: "app-worker:${WORKER_VERSION:-dev}"
     container_name: app-worker
     networks:
       - backend
