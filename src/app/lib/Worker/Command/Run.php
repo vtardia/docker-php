@@ -2,6 +2,7 @@
 namespace Worker\Command;
 
 use Psr\Log\LoggerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,6 +14,8 @@ class Run extends Command
 
     protected ?OutputInterface $output = null;
 
+    protected LoggerInterface $logger;
+
     /**
      * Termination flag
      */
@@ -23,17 +26,12 @@ class Run extends Command
      */
     protected bool $debug = false;
 
-    /**
-     * Constructor
-     *
-     * @param LoggerInterface $logger PSR-4 logger
-     */
     public function __construct(
-        protected LoggerInterface $logger,
+        protected ContainerInterface $container,
         protected string $currentUser
     ) {
         declare(ticks = 1);
-        $this->logger = $logger;
+        $this->logger = $container->get('logger');
 
         parent::__construct();
 
@@ -86,7 +84,25 @@ class Run extends Command
         $this->logger->info('Starting Worker loop', ['user' => $this->currentUser]);
 
         while (!$this->terminate) {
+            $postgres = $this->container->get('postgres');
+            $mysql = $this->container->get('mysql');
+            
             $this->logger->info('Working hard...');
+            $sth = $postgres->prepare('select * from users;');
+            $sth->execute();
+            $data = $sth->fetchAll(\PDO::FETCH_ASSOC);
+            $this->logger->info('Postgres users', ['count' => count($data)]);
+
+            $sth = $mysql->prepare('select * from users;');
+            $sth->execute();
+            $data = $sth->fetchAll(\PDO::FETCH_ASSOC);
+            $this->logger->info('MySQL users', ['count' => count($data)]);
+
+            $this->logger->info('Disconnecting from Postgres');
+            $postgres = null;
+
+            $this->logger->info('Disconnecting from MySQL');
+            $mysql = null;
             sleep(5);
 
             // Cleanup

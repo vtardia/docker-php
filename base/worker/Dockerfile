@@ -2,13 +2,13 @@ FROM php:8.2-cli-alpine
 
 # Install (and cleanup) basic packages
 RUN apk update \
-    && apk add --no-cache linux-headers libzip-dev $PHPIZE_DEPS autoconf \
-    build-base openssl-dev pcre-dev libpq-dev bash \
+    && apk add --no-cache linux-headers libzip libzip-dev $PHPIZE_DEPS autoconf \
+    build-base openssl-dev pcre-dev libpq libpq-dev bash \
     && docker-php-ext-install pdo_pgsql pdo_mysql mysqli sockets \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install pcntl && docker-php-ext-enable pcntl \
     && docker-php-source delete \
-    && apk del linux-headers libzip-dev $PHPIZE_DEPS autoconf build-base \
+    && apk del linux-headers libzip-dev $PHPIZE_DEPS autoconf build-base openssl-dev pcre-dev libpq-dev libzip-dev \
     && rm -rf /var/cache/apk/*
 
 # Use PHP INI production file by default

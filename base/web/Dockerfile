@@ -4,14 +4,14 @@ ENV NGINX_DOC_ROOT /var/www/app/public
 
 # Install (and cleanup) basic packages
 RUN apk update \
-    && apk add --no-cache linux-headers libzip-dev $PHPIZE_DEPS autoconf \
-    build-base openssl-dev pcre-dev libpq-dev \
+    && apk add --no-cache linux-headers libzip libzip-dev $PHPIZE_DEPS autoconf \
+    build-base openssl-dev pcre-dev libpq libpq-dev \
     && docker-php-ext-install pdo_pgsql pdo_mysql mysqli sockets \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install pcntl && docker-php-ext-enable pcntl \
     && docker-php-source delete \
     && apk add --no-cache curl supervisor nginx \
-    && apk del linux-headers $PHPIZE_DEPS autoconf build-base \
+    && apk del linux-headers $PHPIZE_DEPS autoconf build-base openssl-dev pcre-dev libpq-dev libzip-dev \
     && rm -rf /var/cache/apk/*
 
 # Create required directories for Nginx and Supervisor

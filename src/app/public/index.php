@@ -3,7 +3,7 @@
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-require __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/../init/web.php';
 
 $app->get('/', function (Request $request, Response $response, array $args) {
     $response->getBody()->write('Hello, World!');
