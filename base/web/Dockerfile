@@ -8,6 +8,7 @@ RUN apk update \
     build-base openssl-dev pcre-dev libpq-dev \
     && docker-php-ext-install pdo_pgsql pdo_mysql mysqli sockets \
     && docker-php-ext-install bcmath \
+    && docker-php-ext-install pcntl && docker-php-ext-enable pcntl \
     && docker-php-source delete \
     && apk add --no-cache curl supervisor nginx \
     && apk del linux-headers $PHPIZE_DEPS autoconf build-base \
