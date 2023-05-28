@@ -7,16 +7,16 @@ services:
       context: ./src/
       # must be relative to context directory
       dockerfile: ../build/Dockerfile.web
-    image: app-web:1.0
+    image: app-web:dev
     container_name: app-server
     networks:
       - backend
     depends_on:
       - mariadb
-      - mongodb
+      - postgres
     links:
       - mariadb:mariadb
-      - mongodb:mongodb
+      - postgres:postgres
     ports:
       - "${WEB_PORT:-8000}:80"
     # In production use .env files or ${ENV_VAR} syntax
@@ -26,27 +26,26 @@ services:
       MYSQL_DATABASE: mysite
       MYSQL_USER: mysite
       MYSQL_PASSWORD: mysite
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
-      MONGODB_DATABASE: mysite
-      MONGODB_USER: root
-      MONGODB_PASSWORD: password
+      POSTGRES_HOST: postgres
+      POSTGRES_DATABASE: mysite
+      POSTGRES_USER: mysite
+      POSTGRES_PASSWORD: mysite
 
   worker:
     build:
       context: ./src/
       # must be relative to context directory
       dockerfile: ../build/Dockerfile.worker
-    image: app-worker:1.0
+    image: app-worker:dev
     container_name: app-worker
     networks:
       - backend
     depends_on:
       - mariadb
-      - mongodb
+      - postgres
     links:
       - mariadb:mariadb
-      - mongodb:mongodb
+      - postgres:postgres
 
 networks:
   backend:

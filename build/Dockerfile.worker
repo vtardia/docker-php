@@ -1,20 +1,24 @@
-FROM php-worker:7.4-alpine
+FROM php-worker:8.2-alpine
 
 # Edit here to use a different location
 # and remember to chown/chmod to phpuser
 # and use USER root if you need to work on system stuff
-ENV WORKER_HOME ${HOME}/worker
+ENV WORKER_HOME ${HOME}
 RUN mkdir -p ${WORKER_HOME}
 
-COPY ./worker/bin ${WORKER_HOME}/bin
+USER root
 
-COPY ./worker/composer.json ${WORKER_HOME}/composer.json
+COPY ./app ${WORKER_HOME}/app
 
-WORKDIR ${WORKER_HOME}
+# Adjust permissions for new files and subdirs
+RUN chown -R phpuser:phpuser ${WORKER_HOME}/app
 
+WORKDIR ${WORKER_HOME}/app
+
+USER phpuser
 RUN composer install --no-interaction
 
 ENV PATH="~/.composer/vendor/bin:./vendor/bin:${PATH}"
 
 # Edit below to use a different command
-CMD ["bin/worker"]
+CMD ["bin/worker", "run"]

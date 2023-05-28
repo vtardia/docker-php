@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+
+declare(ticks = 1);
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Symfony\Component\Console;
+
+$terminate = false;
+$logFile = 'php://stdout';
+/* $logFile = '/var/log/worker/activity.log'; */
+
+$processUser = posix_getpwuid(posix_geteuid());
+
+$log = new Logger('activity');
+$log->pushHandler(new StreamHandler($logFile, Logger::INFO));
+
+$worker = new Console\Application('Worker', '1.0.0');
+
+// Lazyload commands
+$commandLoader = new Console\CommandLoader\FactoryCommandLoader([
+    'run' => function() use ($log, $processUser) {
+        return new Worker\Command\Run($log, $processUser['name']);
+    }
+]);
+$worker->setCommandLoader($commandLoader);
+$worker->setCatchExceptions(true);
+$worker->run();

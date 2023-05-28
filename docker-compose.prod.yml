@@ -3,16 +3,16 @@ version: '3'
 services:
 
   web:
-    image: "app-web:${WEB_VERSION:-1.0}"
+    image: "app-web:${WEB_VERSION:-latest}"
     container_name: app-server
     networks:
       - backend
     depends_on:
       - mariadb
-      - mongodb
+      - postgres
     links:
       - mariadb:mariadb
-      - mongodb:mongodb
+      - postgres:postgres
     ports:
       - "${WEB_PORT:-8000}:80"
     # In production use .env files or ${ENV_VAR} syntax
@@ -22,23 +22,22 @@ services:
       MYSQL_DATABASE: mysite
       MYSQL_USER: mysite
       MYSQL_PASSWORD: mysite
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
-      MONGODB_DATABASE: mysite
-      MONGODB_USER: root
-      MONGODB_PASSWORD: password
+      POSTGRES_HOST: postgres
+      POSTGRES_DATABASE: mysite
+      POSTGRES_USER: mysite
+      POSTGRES_PASSWORD: mysite
 
   worker:
-    image: "app-worker:${WORKER_VERSION:-1.0}"
+    image: "app-worker:${WORKER_VERSION:-latest}"
     container_name: app-worker
     networks:
       - backend
     depends_on:
       - mariadb
-      - mongodb
+      - postgres
     links:
       - mariadb:mariadb
-      - mongodb:mongodb
+      - postgres:postgres
 
 networks:
   backend:

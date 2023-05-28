@@ -1,6 +1,7 @@
 .DS_Store
+TODO.md
 /data/mariadb/db/*
-/data/mongodb/db/*
+/data/postgres/db/*
 /build/*.version
 # app-specific deploy files
 /deploy/*

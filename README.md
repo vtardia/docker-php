@@ -8,8 +8,7 @@ The image set includes:
 
  - a web server base image with Nginx, PHP-FPM, Composer and Supervisor
  - a worker base image with PHP CLI and Composer
- - a simple web app example that runs with the server image
- - a simple background CLI app that runs with the worker image
+ - a app example with a web frontend and a background worker
 
 All images are based on Alpine GNU/Linux in order to be as small as possible, and have MySQL and MongoDB PHP extensions enabled.
 
@@ -18,17 +17,17 @@ All images are based on Alpine GNU/Linux in order to be as small as possible, an
 ### 1. Build the base images without username
 
 ```console
-$ cd base/web && docker build . -t php-server:7.4-alpine; cd ../..
+$ cd base/web && docker build . -t php-server:8.2-alpine; cd ../..
 ```
 
 ```console
-$ cd base/worker && docker build . -t php-worker:7.4-alpine; cd ../..
+$ cd base/worker && docker build . -t php-worker:8.2-alpine; cd ../..
 ```
 
 ### 2. Start the stack
 
 ```console
-$ docker-compose up --build [-d]
+$ docker compose up --build [-d]
 ```
 
 ### 3. Check that all is working properly
@@ -40,31 +39,31 @@ The web app listen by default on `http://localhost:8000`, it exposes this endpoi
  - `/`: simple hello world
  - `/info.php`: shows PHP configuration
  - `/mysql`: connects to MySQL and fetches some sample data
- - `/mongodb`: connects to MongoDB and fetches some sample data
+ - `/postgres`: connects to Postgres and fetches some sample data
 
 ## Simple and naive production scenario
 
 **Please note**: I did my best to configure the images with a proper security level, but I haven't yet tested them with an actual production environment, so if you want to use it in production take your time to test and tweak the system!
 
-The scripts `build/web` and `build/worker` will package your web and console apps into Docker images adding a versioning tag based on the current timestamp. The latest version tag is saved into `build/web.version` and `build/worker.version`.
+The scripts `build/web` and `build/worker` will package your web and console apps into Docker images adding a versioning tag based on the current commit hash. The latest version tag is saved into `build/web.version` and `build/worker.version`.
 
 ```console
-REPOSITORY          TAG                    IMAGE ID            CREATED              SIZE
-app-worker          20190911104230         3f3f297562a6        About a minute ago   120MB
-app-web             20190911104105         d451986e42f5        2 minutes ago        170MB
+REPOSITORY          TAG                  IMAGE ID            CREATED              SIZE
+app-worker          <CommitHash>         3f3f297562a6        About a minute ago   120MB
+app-web             <CommitHash>         d451986e42f5        2 minutes ago        170MB
 ```
 
-The images can then deployed to either your private Docker registry (i.e. `docker push app-web:20190911104105`) or directly to your production server using Docker `save` command:
+The images can then deployed to either your private Docker registry (i.e. `docker push app-web:<hash>`) or directly to your production server using Docker `save` command:
 
 ```console
-$ docker save app-web:20190911104105 | gzip > build/app-web-20190911104105.tar.gz
-$ scp build/app-web-20190911104105.tar.gz you@yourserver:/some/path/app-web-20190911104105.tar.gz
+$ docker save app-web:<hash> | gzip > build/app-web-<hash>.tar.gz
+$ scp build/app-web-<hash>.tar.gz you@yourserver:/some/path/app-web-<hash>.tar.gz
 ```
 
 On your production server you can then `load` the new image into Docker:
 
 ```console
-$ ssh you@yourserver 'docker load -i /some/path/app-web-20190911104105.tar.gz'
+$ ssh you@yourserver 'docker load -i /some/path/app-web-<hash>.tar.gz'
 $ scp build/web.version you@yourserver:/some/path/web.version
 ```
 

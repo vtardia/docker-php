@@ -1,11 +1,25 @@
 {
     "name": "vito/app",
-    "description": "Dummy PHP web application",
+    "description": "Dummy PHP web application with background worker",
     "type": "project",
     "require": {
-        "slim/slim": "^3",
-        "mongodb/mongodb": "^1",
-        "monolog/monolog": "^2"
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-pdo_pgsql": "*",
+        "ext-json": "*",
+        "ext-pcntl": "*",
+        "php-di/php-di": "^6.4",
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4",
+        "monolog/monolog": "^3",
+        "composer-runtime-api": "^2",
+        "symfony/console": "^6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Worker\\": "lib/Worker/"
+        }
     },
     "license": "MIT",
     "authors": [

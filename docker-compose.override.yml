@@ -22,22 +22,22 @@ services:
     networks:
       - backend
 
-  mongodb:
-    image: mongo:4-xenial
-    container_name: app-mongo
+  postgres:
+    image: postgres:15-alpine
+    container_name: app-postgres
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: mysite
+      POSTGRES_DB: mysite
+      POSTGRES_USER: mysite
+      POSTGRES_PASSWORD: mysite
     volumes:
-      - ./data/mongodb/db:/data/db
-      # Place init .js file(s) at path below
-      - ./data/mongodb/init:/docker-entrypoint-initdb.d
+      - ./data/postgres/db:/var/lib/postgresql/data
+      # Place init .sql file(s) at path below
+      - ./data/postgres/init:/docker-entrypoint-initdb.d
       - /tmp:/tmp
     expose:
-      - "27017"
+      - "5432"
     ports:
-      - "27017:27017"
+      - "5432:5432"
     networks:
       - backend
 
